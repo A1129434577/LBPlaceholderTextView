@@ -1,0 +1,2 @@
+# LBPlaceholderTextView
+支持placeholder、clearButtonMode、maxLength的TextView
