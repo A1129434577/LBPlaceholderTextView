@@ -7,4 +7,4 @@ placeholderTextView.maxLength = 200;
 placeholderTextView.clearButtonMode = UITextFieldViewModeAlways;
 placeholderTextView.placeholder = @"请输入";
 ```
-![]()
+![](https://github.com/A1129434577/LBPlaceholderTextView/blob/master/LBPlaceholderTextView.gif?raw=true)
