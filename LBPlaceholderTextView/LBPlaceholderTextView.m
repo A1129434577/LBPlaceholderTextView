@@ -23,6 +23,7 @@
 @end
 
 @interface LBPlaceholderTextView()<UITextFieldDelegate>
+@property (nonatomic,assign)CGRect placeholderTextFieldFrame;
 @end
 @implementation LBPlaceholderTextView
 - (instancetype)initWithFrame:(CGRect)frame
@@ -30,10 +31,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         _maxLength = -1;
+        self.font = [UIFont systemFontOfSize:16];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextViewTextDidChangeNotification object:nil];
         [self addObserver:self forKeyPath:NSStringFromSelector(@selector(frame)) options:NSKeyValueObservingOptionNew context:nil];
-        self.contentInset = UIEdgeInsetsMake((CGRectGetHeight(frame)-self.contentSize.height)/2, 0, (CGRectGetWidth(frame)-self.contentSize.width)/2, 0);
-        _placeholderTextField = [[LBTextViewTextField alloc] initWithFrame:frame];
+        _placeholderTextFieldFrame = CGRectMake(CGRectGetMinX(frame), CGRectGetMinY(frame)+(self.contentInset.top?self.contentInset.top:10), CGRectGetWidth(frame), self.font.lineHeight);
+        _placeholderTextField = [[LBTextViewTextField alloc] initWithFrame:_placeholderTextFieldFrame];
         _placeholderTextField.leftViewMode = UITextFieldViewModeAlways;
         _placeholderTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, CGRectGetHeight(frame))];
         _placeholderTextField.textView = self;
@@ -50,6 +52,11 @@
 -(void)setFont:(UIFont *)font{
     [super setFont:font];
     self.placeholderTextField.font = font;
+    
+    _placeholderTextFieldFrame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame)+(self.contentInset.top?self.contentInset.top:10), CGRectGetWidth(self.frame), self.font.lineHeight);
+    if (self.text.length) {
+        self.placeholderTextField.frame = self.frame;
+    }else self.placeholderTextField.frame = _placeholderTextFieldFrame;
 }
 -(void)setText:(NSString *)text{
     [super setText:text];
@@ -70,7 +77,10 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (keyPath == NSStringFromSelector(@selector(frame))) {
-        self.placeholderTextField.frame = self.frame;
+        if (self.text.length) {
+            self.placeholderTextField.frame = self.frame;
+        }else self.placeholderTextField.frame = _placeholderTextFieldFrame;
+        
     }
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -82,11 +92,11 @@
         if (_maxLength>-1 && self.text.length > _maxLength) {
             self.text = [self.text substringToIndex:_maxLength];
         }
+        self.placeholderTextField.frame = self.frame;
     }else{
         self.placeholderTextField.text = nil;
+        self.placeholderTextField.frame = _placeholderTextFieldFrame;
     }
-    
-    self.contentInset = UIEdgeInsetsMake((CGRectGetHeight(self.bounds)-self.contentSize.height)/2, self.contentInset.left, (CGRectGetWidth(self.bounds)-self.contentSize.width)/2, self.contentInset.right);
 }
 - (BOOL)textFieldShouldClear:(UITextField *)textField{
     self.text = nil;
