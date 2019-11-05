@@ -74,6 +74,10 @@
     _placeholder = placeholder;
     self.placeholderTextField.placeholder = placeholder;
 }
+-(void)setAttributedPlaceholder:(NSAttributedString *)attributedPlaceholder{
+    _attributedPlaceholder = attributedPlaceholder;
+    self.placeholderTextField.attributedPlaceholder = attributedPlaceholder;
+}
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (keyPath == NSStringFromSelector(@selector(frame))) {

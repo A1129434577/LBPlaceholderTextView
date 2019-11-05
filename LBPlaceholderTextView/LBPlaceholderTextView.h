@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LBPlaceholderTextView : UITextView
 @property(nonatomic,readonly,strong)LBTextViewTextField *placeholderTextField;
 @property(nonatomic)UITextFieldViewMode clearButtonMode;
-@property(nonatomic,strong)NSString *placeholder;
+@property(nonatomic,copy)NSString *placeholder;
+@property(nonatomic,copy)NSAttributedString *attributedPlaceholder;
 @property(nonatomic,assign)NSInteger maxLength;
 @end
 
