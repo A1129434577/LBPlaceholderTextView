@@ -44,9 +44,18 @@
     }
     return self;
 }
+
 -(void)didMoveToSuperview{
     [super didMoveToSuperview];
     [self.superview addSubview:_placeholderTextField];
+}
+-(void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    self.placeholderTextFieldFrame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame)+(self.contentInset.top?self.contentInset.top:10), CGRectGetWidth(self.frame), self.font.lineHeight);
+}
+-(void)setPlaceholderTextFieldFrame:(CGRect)placeholderTextFieldFrame{
+    _placeholderTextFieldFrame = placeholderTextFieldFrame;
+    _placeholderTextField.frame = placeholderTextFieldFrame;
 }
 
 -(void)setFont:(UIFont *)font{
