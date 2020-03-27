@@ -1,21 +1,20 @@
 //
 //  LBPlaceholderTextView.h
-//  TransitBox
+//  TestDome
 //
-//  Created by 刘彬 on 2019/4/29.
-//  Copyright © 2019 BIN. All rights reserved.
+//  Created by 刘彬 on 2020/3/27.
+//  Copyright © 2020 刘彬. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-@class LBTextViewTextField;
+
 @interface LBPlaceholderTextView : UITextView
-@property(nonatomic,readonly,strong)LBTextViewTextField *placeholderTextField;
-@property(nonatomic)UITextFieldViewMode clearButtonMode;
-@property(nonatomic,copy)NSString *placeholder;
-@property(nonatomic,copy)NSAttributedString *attributedPlaceholder;
-@property(nonatomic,assign)NSInteger maxLength;
+@property (nonatomic, strong, nullable) NSString *placeholder;
+@property (nonatomic, strong, nullable) UIColor  *placeholderColor;
+@property (nonatomic, assign, nullable) NSNumber *maxLength;
+
 @end
 
 NS_ASSUME_NONNULL_END

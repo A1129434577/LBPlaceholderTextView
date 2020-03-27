@@ -1,123 +1,71 @@
 //
 //  LBPlaceholderTextView.m
-//  TransitBox
+//  TestDome
 //
-//  Created by 刘彬 on 2019/4/29.
-//  Copyright © 2019 BIN. All rights reserved.
+//  Created by 刘彬 on 2020/3/27.
+//  Copyright © 2020 刘彬. All rights reserved.
 //
 
 #import "LBPlaceholderTextView.h"
 
-@interface LBTextViewTextField : UITextField
-@property (nonatomic,assign)LBPlaceholderTextView *textView;
-@end
-@implementation LBTextViewTextField
-
--(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
-    UIView *hitView = [super hitTest:point withEvent:event];
-    if ([hitView isEqual:self]) {
-        return (UIView *)self.textView;
-    }
-    return hitView;
-}
+@interface LBPlaceholderTextView ()
+@property (nonatomic, strong) UITextView *placeholderTextView;
 @end
 
-@interface LBPlaceholderTextView()<UITextFieldDelegate>
-@property (nonatomic,assign)CGRect placeholderTextFieldFrame;
-@end
 @implementation LBPlaceholderTextView
+- (instancetype)init
+{
+    return [self initWithFrame:CGRectZero];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _maxLength = -1;
-        self.font = [UIFont systemFontOfSize:16];
+        _placeholderTextView = [[UITextView alloc] init];
+        _placeholderTextView.backgroundColor = [UIColor clearColor];
+        _placeholderTextView.textColor = [UIColor lightGrayColor];
+        _placeholderTextView.userInteractionEnabled = NO;
+        [self addSubview:_placeholderTextView];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextViewTextDidChangeNotification object:nil];
-        [self addObserver:self forKeyPath:NSStringFromSelector(@selector(frame)) options:NSKeyValueObservingOptionNew context:nil];
-        _placeholderTextFieldFrame = CGRectMake(CGRectGetMinX(frame), CGRectGetMinY(frame)+(self.contentInset.top?self.contentInset.top:10), CGRectGetWidth(frame), self.font.lineHeight);
-        _placeholderTextField = [[LBTextViewTextField alloc] initWithFrame:_placeholderTextFieldFrame];
-        _placeholderTextField.leftViewMode = UITextFieldViewModeAlways;
-        _placeholderTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, CGRectGetHeight(frame))];
-        _placeholderTextField.textView = self;
-        _placeholderTextField.delegate = self;
-        _placeholderTextField.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
 
--(void)didMoveToSuperview{
-    [super didMoveToSuperview];
-    [self.superview addSubview:_placeholderTextField];
-}
--(void)setFrame:(CGRect)frame{
-    [super setFrame:frame];
-    self.placeholderTextFieldFrame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame)+(self.contentInset.top?self.contentInset.top:10), CGRectGetWidth(self.frame), self.font.lineHeight);
-}
--(void)setPlaceholderTextFieldFrame:(CGRect)placeholderTextFieldFrame{
-    _placeholderTextFieldFrame = placeholderTextFieldFrame;
-    _placeholderTextField.frame = placeholderTextFieldFrame;
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    _placeholderTextView.frame = self.bounds;
 }
 
--(void)setFont:(UIFont *)font{
+- (void)setFont:(UIFont *)font{
     [super setFont:font];
-    self.placeholderTextField.font = font;
-    
-    _placeholderTextFieldFrame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame)+(self.contentInset.top?self.contentInset.top:10), CGRectGetWidth(self.frame), self.font.lineHeight);
-    if (self.text.length) {
-        self.placeholderTextField.frame = self.frame;
-    }else self.placeholderTextField.frame = _placeholderTextFieldFrame;
+    _placeholderTextView.font = font;
 }
--(void)setText:(NSString *)text{
-    [super setText:text];
-    [self textDidChange];
+
+-(void)setPlaceholderColor:(UIColor *)placeholderColor{
+    _placeholderColor = placeholderColor;
+    _placeholderTextView.textColor = placeholderColor;
 }
--(void)setClearButtonMode:(UITextFieldViewMode)clearButtonMode{
-    _clearButtonMode = clearButtonMode;
-    _placeholderTextField.clearButtonMode = clearButtonMode;
-    
-    if (clearButtonMode != UITextFieldViewModeNever) {
-        self.contentInset = UIEdgeInsetsMake(self.contentInset.top, self.contentInset.left, self.contentInset.bottom, 20);
-    }
-}
+
 -(void)setPlaceholder:(NSString *)placeholder{
     _placeholder = placeholder;
-    self.placeholderTextField.placeholder = placeholder;
+    _placeholderTextView.text = placeholder;
 }
--(void)setAttributedPlaceholder:(NSAttributedString *)attributedPlaceholder{
-    _attributedPlaceholder = attributedPlaceholder;
-    self.placeholderTextField.attributedPlaceholder = attributedPlaceholder;
-}
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (keyPath == NSStringFromSelector(@selector(frame))) {
-        if (self.text.length) {
-            self.placeholderTextField.frame = self.frame;
-        }else self.placeholderTextField.frame = _placeholderTextFieldFrame;
-        
-    }
-    else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
+
 -(void)textDidChange{
     if (self.text.length) {
-        self.placeholderTextField.text = @" ";//让clearButton像TextField一样正常显示
-        if (_maxLength>-1 && self.text.length > _maxLength) {
-            self.text = [self.text substringToIndex:_maxLength];
-        }
-        self.placeholderTextField.frame = self.frame;
+        _placeholderTextView.text = nil;
     }else{
-        self.placeholderTextField.text = nil;
-        self.placeholderTextField.frame = _placeholderTextFieldFrame;
+        _placeholderTextView.text = _placeholder;
+    }
+    if (self.maxLength && self.text.length>self.maxLength.unsignedIntegerValue) {
+        self.text = [self.text substringToIndex:self.maxLength.unsignedIntegerValue];
     }
 }
-- (BOOL)textFieldShouldClear:(UITextField *)textField{
-    self.text = nil;
-    [self textDidChange];
-    return NO;
-}
+
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(frame))];
 }
+
 @end
