@@ -53,6 +53,11 @@
     _placeholderTextView.text = placeholder;
 }
 
+- (void)setText:(NSString *)text{
+    [super setText:text];
+    [self textDidChange];
+}
+
 -(void)textDidChange{
     if (self.text.length) {
         _placeholderTextView.text = nil;
