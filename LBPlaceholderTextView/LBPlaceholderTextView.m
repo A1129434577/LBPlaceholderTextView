@@ -28,7 +28,7 @@
         _placeholderTextView.userInteractionEnabled = NO;
         [self addSubview:_placeholderTextView];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextViewTextDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextViewTextDidChangeNotification object:self];
     }
     return self;
 }
@@ -55,7 +55,7 @@
 
 - (void)setText:(NSString *)text{
     [super setText:text];
-    [self textDidChange];
+    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
 
 -(void)textDidChange{
