@@ -50,7 +50,7 @@
 
 -(void)setPlaceholder:(NSString *)placeholder{
     _placeholder = placeholder;
-    if (!self.text) {
+    if (!self.text.length) {
         _placeholderTextView.text = placeholder;
     }
 }
