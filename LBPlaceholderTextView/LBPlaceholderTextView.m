@@ -42,6 +42,10 @@
     [super setFont:font];
     _placeholderTextView.font = font;
 }
+-(void)setContentInset:(UIEdgeInsets)contentInset{
+    [super setContentInset:contentInset];
+    _placeholderTextView.contentInset = contentInset;
+}
 
 -(void)setPlaceholderColor:(UIColor *)placeholderColor{
     _placeholderColor = placeholderColor;

@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "LBPlaceholderTextView"
-  spec.version      = "1.1.4"
+  spec.version      = "1.1.5"
   spec.summary      = "支持placeholder、clearButtonMode、maxLength的TextView。"
   spec.description  = "支持placeholder、clearButtonMode、maxLength的TextView。"
   spec.homepage     = "https://github.com/A1129434577/LBPlaceholderTextView"
