@@ -47,13 +47,13 @@
     _placeholderTextView.contentInset = contentInset;
 }
 
--(void)setPlaceholderColor:(UIColor *)placeholderColor{
-    _placeholderColor = placeholderColor;
+-(void)setLb_placeholderColor:(UIColor *)placeholderColor{
+    _lb_placeholderColor = placeholderColor;
     _placeholderTextView.textColor = placeholderColor;
 }
 
--(void)setPlaceholder:(NSString *)placeholder{
-    _placeholder = placeholder;
+-(void)setLb_placeholder:(NSString *)placeholder{
+    _lb_placeholder = placeholder;
     if (!self.text.length) {
         _placeholderTextView.text = placeholder;
     }
@@ -68,10 +68,10 @@
     if (self.text.length) {
         _placeholderTextView.text = nil;
     }else{
-        _placeholderTextView.text = _placeholder;
+        _placeholderTextView.text = _lb_placeholder;
     }
-    if (self.maxLength && self.text.length>self.maxLength.unsignedIntegerValue) {
-        self.text = [self.text substringToIndex:self.maxLength.unsignedIntegerValue];
+    if (self.lb_maxLength && self.text.length>self.lb_maxLength.unsignedIntegerValue) {
+        self.text = [self.text substringToIndex:self.lb_maxLength.unsignedIntegerValue];
     }
 }
 

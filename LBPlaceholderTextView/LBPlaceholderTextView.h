@@ -11,9 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LBPlaceholderTextView : UITextView
-@property (nonatomic, strong, nullable) NSString *placeholder;
-@property (nonatomic, strong, nullable) UIColor  *placeholderColor;
-@property (nonatomic, assign, nullable) NSNumber *maxLength;
+@property (nonatomic, strong, nullable) NSString *lb_placeholder;
+@property (nonatomic, strong, nullable) UIColor  *lb_placeholderColor;
+@property (nonatomic, assign, nullable) NSNumber *lb_maxLength;
 
 @end
 

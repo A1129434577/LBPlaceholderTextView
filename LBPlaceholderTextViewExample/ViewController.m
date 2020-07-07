@@ -20,10 +20,10 @@
     self.title = @"LBPlaceholderTextView";
     LBPlaceholderTextView *placeholderTextView = [[LBPlaceholderTextView alloc] initWithFrame:CGRectMake(20, 200, CGRectGetWidth(self.view.frame)-20*2, 60)];
     placeholderTextView.backgroundColor = [UIColor cyanColor];
-    placeholderTextView.placeholderColor = [UIColor redColor];
+    placeholderTextView.lb_placeholderColor = [UIColor redColor];
     placeholderTextView.font = [UIFont systemFontOfSize:17];
-    placeholderTextView.maxLength = @20;
-    placeholderTextView.placeholder = @"请输入";
+    placeholderTextView.lb_maxLength = @20;
+    placeholderTextView.lb_placeholder = @"请输入";
     [self.view addSubview:placeholderTextView];
 }
 
